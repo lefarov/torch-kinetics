@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "torch-kinetics"
+authors = [
+    {name = "Max Lefarov", email = "mlefarov@gmail.com"},
+]
+description = "Implementation of Enzyme Kinetics Model in PyTorch with support of auto-differentiation."
+readme = "README.md"
+requires-python = ">=3.7"
+keywords = ["bioinformatics", "system-biology", "ml"]
+license = {file = "LICENSE"}
+classifiers = [
+    "Framework :: PyTorch",
+    "Programming Language :: Python :: 3",
+]
+
+dynamic = ["version", "dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
