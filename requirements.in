@@ -1,4 +1,0 @@
-torch>=2.0
-torchdiffeq>=0.2.3
-numpy>=1.25
-matplotlib>=3.7.2
