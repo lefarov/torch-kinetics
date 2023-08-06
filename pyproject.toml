@@ -17,7 +17,14 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 
-dynamic = ["version", "dependencies"]
+dependencies = [
+    "torch>=2.0",
+    "torchdiffeq>=0.2",
+    "numpy>=1.25",
+    "matplotlib>=3.7",
+]
 
-[tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}
+dynamic = ["version"]
+
+#[tool.setuptools.dynamic]
+#dependencies = {file = ["requirements.txt"]}
