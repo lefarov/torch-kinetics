@@ -16,10 +16,7 @@ class Model(torch.nn.Module):
 
         self.reactions = torch.nn.ModuleDict()
 
-    def add_reaction(
-        self,
-        reaction: reactions.Reaction,
-    ):
+    def add_reaction(self, reaction: reactions.Reaction):
         if reaction.name in self.reactions:
             raise RuntimeError(
                 f"Trying to add reaction with existing name {reaction.name}."
