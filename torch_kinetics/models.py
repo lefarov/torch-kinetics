@@ -56,13 +56,9 @@ class Model(torch.nn.Module):
 
     def forward(self, t: torch.Tensor, state: torch.Tensor) -> torch.Tensor:
         """
-        TODO:
-         - check if any memory copy happens
-         - check if `index_select` and `index_add` works faster
-
-        :param t:
-        :param state:
-        :return:
+        :param t: current integration time step.
+        :param state: current state of the system.
+        :return: compute derivative.
         """
         if state.size(-1) != self._num_metabolites or state.ndim > 2:
             raise RuntimeError("State of incorrect dimension")
@@ -70,7 +66,6 @@ class Model(torch.nn.Module):
         if state.ndim == 1:
             state = state.unsqueeze(0)
 
-        batch_size = state.size(0)
         derivative = torch.zeros_like(state)
 
         for reaction in self.reactions.values():
@@ -78,23 +73,12 @@ class Model(torch.nn.Module):
             enzyme_index = reaction.get_enzyme_index()
             product_index = reaction.get_product_index()
 
-            # expand shouldn't copy the memory
-            substrate = state.gather(
-                dim=1,
-                index=substrate_index.expand(batch_size, -1),
-            )
-            enzyme = state.gather(dim=1, index=enzyme_index.expand(batch_size, -1))
+            substrate = state.index_select(dim=1, index=substrate_index)
+            enzyme = state.index_select(dim=1, index=enzyme_index)
+
             rate = reaction(substrate, enzyme)
 
-            derivative.scatter_add_(
-                dim=1,
-                index=substrate_index.expand(batch_size, -1),
-                src=-rate.expand(batch_size, -1),
-            )
-            derivative.scatter_add_(
-                dim=1,
-                index=product_index.expand(batch_size, -1),
-                src=rate.expand(batch_size, -1),
-            )
+            derivative.index_add_(dim=1, index=substrate_index, source=rate, alpha=-1)
+            derivative.index_add_(dim=1, index=product_index, source=rate)
 
         return derivative
