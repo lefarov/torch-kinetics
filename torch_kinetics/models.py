@@ -58,7 +58,6 @@ class Model(torch.nn.Module):
         """
         TODO:
          - check if any memory copy happens
-         - change gather and scatter to inplace operations
          - check if `index_select` and `index_add` works faster
 
         :param t:
@@ -87,12 +86,12 @@ class Model(torch.nn.Module):
             enzyme = state.gather(dim=1, index=enzyme_index.expand(batch_size, -1))
             rate = reaction(substrate, enzyme)
 
-            derivative = derivative.scatter_add(
+            derivative.scatter_add_(
                 dim=1,
                 index=substrate_index.expand(batch_size, -1),
                 src=-rate.expand(batch_size, -1),
             )
-            derivative = derivative.scatter_add(
+            derivative.scatter_add_(
                 dim=1,
                 index=product_index.expand(batch_size, -1),
                 src=rate.expand(batch_size, -1),
