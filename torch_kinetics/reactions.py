@@ -58,7 +58,8 @@ class Reaction(torch.nn.Module):
     def index(self, index: torch.Tensor):
         if self._index is not None:
             raise RuntimeError(
-                "Metabolite index can be set only once when reaction is added to the model."
+                "Metabolite index can be set only once when reaction is added to the model. "
+                "Possibly cause: trying to add the same reaction to the model second time."
             )
 
         self._index = index
