@@ -1,6 +1,6 @@
 # torch-kinetics
 A minimalistic package for implementing differentiable Enzyme Kinetics models with PyTorch framework.
-The interfaces in this package are partially based on [kinetics](https://github.com/willfinnigan/kinetics) package.
+The interfaces in this package are partially based on `kinetics` package.
 Please refer to its [documentation](https://kinetics.readthedocs.io/en/latest/index.html) for the illustrated 
 explanation of Enzyme Kinetics models.
 
